@@ -4,6 +4,9 @@
 "use strict";
 
 mat.LanguageOptionsView = Backbone.View.extend({
+
+    el: ".language-toolbar-options",
+
     events: {
         "click .clear-all": "clearAll",
         "click .select-all": "selectAll"

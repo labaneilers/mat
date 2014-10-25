@@ -1,93 +1,116 @@
 /*jsl:option explicit*/
-/* global _, mat, Backbone */
+/* global _, mat, jQuery, Backbone */
 
 "use strict";
 
-mat.ParameterView = Backbone.View.extend({
-    initialize: function () {
-        this.model.set("name", this.$el.find("label").html());
-        this.$input = this.$el.find(".param-value");
-        this.listenTo(this.model, "change:value", this.setValue);
-    },
+(function (mat, $) {
 
-    getValue: function () {
-        return this.$input.val();
-    },
+    mat.ParameterView = Backbone.View.extend({
+        initialize: function () {
+            this.model.set("name", this.$el.find("label").html());
+            this.$input = this.$el.find(".param-value");
+            this.listenTo(this.model, "change:value", this.setValue);
+        },
 
-    setValue: function () {
-        this.$input.val(this.model.get("value"));
-    },
+        getValue: function () {
+            return this.$input.val();
+        },
 
-    updateModel: function () {
-        this.model.set("value", this.getValue());
-    }
-});
+        setValue: function () {
+            this.$input.val(this.model.get("value"));
+        },
 
-mat.TextParameterView = mat.ParameterView.extend({
-    events: {
-        "keyup input": "keyupHandler"
-    },
+        updateModel: function () {
+            this.model.set("value", this.getValue());
+        }
+    });
 
-    keyupHandler: _.debounce(function () {
-        this.updateModel();
-    }, 1000)
-});
+    mat.TextParameterView = mat.ParameterView.extend({
+        events: {
+            "keyup input": "keyupHandler"
+        },
 
-mat.MenuParameterView = mat.ParameterView.extend({
-    events: {
-        "change select.param-value": "updateModel"
-    }
-});
+        keyupHandler: _.debounce(function () {
+            this.updateModel();
+        }, 1000)
+    });
 
-mat.BooleanParameterView = mat.ParameterView.extend({
-    events: {
-        "change input[type=checkbox]": "updateModel"
-    },
+    mat.MenuParameterView = mat.ParameterView.extend({
+        events: {
+            "change select.param-value": "updateModel"
+        }
+    });
 
-    getValue: function () {
-        return this.$input.prop("checked");
-    },
+    mat.BooleanParameterView = mat.ParameterView.extend({
+        events: {
+            "change input[type=checkbox]": "updateModel"
+        },
 
-    setValue: function () {
-        this.$input.prop("checked", this.model.get("value").toString() == "true");
-    }
-});
+        getValue: function () {
+            return this.$input.prop("checked");
+        },
 
-mat.ProductParameterView = mat.TextParameterView.extend({
-    initialize: function () {
+        setValue: function () {
+            this.$input.prop("checked", this.model.get("value").toString() == "true");
+        }
+    });
 
-        mat.ProductParameterView.__super__.initialize.apply(this); 
+    mat.ProductParameterView = mat.TextParameterView.extend({
+        initialize: function () {
 
-        this.$productTypeSelect = this.$el.find(".product-type-select");
-    },
+            mat.ProductParameterView.__super__.initialize.apply(this); 
 
-    events: {
-        "change .product-type-select": "updateModel",
-        "keyup input": "keyupHandler" // TODO inherit this to DRY it up
-    },
+            this.$productTypeSelect = this.$el.find(".product-type-select");
+        },
 
-    getValue: function() {
-        var productType = this.$productTypeSelect.val();
-        var productId = this.$input.val().trim();
-        return productId ? productType + ":" + productId : "";
-    },
+        events: {
+            "change .product-type-select": "updateModel",
+            "keyup input": "keyupHandler" // TODO inherit this to DRY it up
+        },
 
-    setValue: function() {
-        var rawValue = this.model.get("value");
-        var productType = "pc";
-        var value = "";
-        if (rawValue) {
-            var parts = rawValue.split(":");
-            if (parts.length >= 1) {
-                productType = parts[0];
+        getValue: function() {
+            var productType = this.$productTypeSelect.val();
+            var productId = this.$input.val().trim();
+            return productId ? productType + ":" + productId : "";
+        },
 
-                if (parts.length >= 2) {
-                    value = parts[1];
+        setValue: function() {
+            var rawValue = this.model.get("value");
+            var productType = "pc";
+            var value = "";
+            if (rawValue) {
+                var parts = rawValue.split(":");
+                if (parts.length >= 1) {
+                    productType = parts[0];
+
+                    if (parts.length >= 2) {
+                        value = parts[1];
+                    }
                 }
             }
-        }
 
-        this.$productTypeSelect.val(productType);
-        this.$input.val(value);
-    }
-});
+            this.$productTypeSelect.val(productType);
+            this.$input.val(value);
+        }
+    });
+
+    mat.createParameterViews = function () {
+        return $(".param-field").map(function (index, el) {
+            var $input = $(el).find(".param-value");
+            var type = $input.attr("type");
+            var Ctor;
+
+            if (type == "checkbox") {
+                Ctor = mat.BooleanParameterView;
+            } else if (type == "text" && $input.hasClass("param-value-product")) {
+                Ctor = mat.ProductParameterView;
+            } else if ($input.prop("tagName") == "SELECT") {
+                Ctor = mat.MenuParameterView;
+            } else {
+                Ctor = mat.TextParameterView;
+            }
+
+            return new Ctor({ el: el, model: new mat.Parameter() });
+        });
+    };
+}(mat, jQuery));

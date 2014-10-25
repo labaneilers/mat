@@ -7,6 +7,7 @@
 
     var COOKIE_PREFIX = "matData_";
 
+    // This is the main application view, which composes all the other views and models.
     mat.AppView = Backbone.View.extend({
 
         el: "body",
@@ -14,64 +15,52 @@
         initialize: function (options) {
             var me = this;
 
-            this.languageViews = $(".language-toolbar .language-link").map(function (index, el) {
-                return new mat.LanguageView({ 
-                    el: el,
-                    model: new mat.Language({ id: $(el).attr("for"), name: $(el).find("input").attr("name") })
-                });
-            });
+            this.model = {};
 
-            this.languages = new mat.LanguageList(_(this.languageViews).pluck("model"));
+            // This application is optimized to have markup generated on the server. The views in this application
+            // are primarily about data-binding DOM elements to models.
 
-            this.languageOptionsView = new mat.LanguageOptionsView({ model: this.languages, el: $(".language-toolbar-options") });
+            // For the language and parameter views, build the views and models at the same time by iterating over DOM elements.
+            // The models initial data comes from the DOM, so we're letting the view initialize the models.
+            // Then, construct a LanguageList from the models already embedded in the views.
 
-            this.parameterViews = $(".param-field").map(function (index, el) {
-                var $input = $(el).find(".param-value");
-                var type = $input.attr("type");
-                var Ctor;
+            this.languageViews = mat.createLanguageViews();
 
-                if (type == "checkbox") {
-                    Ctor = mat.BooleanParameterView;
-                } else if (type == "text" && $input.hasClass("param-value-product")) {
-                    Ctor = mat.ProductParameterView;
-                } else if ($input.prop("tagName") == "SELECT") {
-                    Ctor = mat.MenuParameterView;
-                } else {
-                    Ctor = mat.TextParameterView;
-                }
+            this.model.languages = new mat.LanguageList(_(this.languageViews).pluck("model"));
 
-                return new Ctor({ el: el, model: new mat.Parameter() });
-            });
+            this.parameterViews = mat.createParameterViews();
 
-            this.parameters = new mat.ParameterList(_(this.parameterViews).pluck("model"));
+            this.model.parameters = new mat.ParameterList(_(this.parameterViews).pluck("model"));
 
-            this.options = new mat.OptionsModel(options); // TODO plumb options, probably need a view
+            // Options model is initialized from the options passed to AppView on application initialization
+            // (determined by the server)
+            // Then, options set by the user can be restored from cookies.
+            this.model.options = new mat.OptionsModel(options);
 
-            this.optionsView = new mat.OptionsView({ model: this.options, el: $(".params-options-section") });
+            this.languageOptionsView = new mat.LanguageOptionsView({ model: this.model.languages });
 
-            this.permalinkView = new mat.PermalinkView({ 
-                model: {
-                    options: me.options,
-                    languages: me.languages,
-                    parameters: me.parameters
-                }
-            });
+            this.optionsView = new mat.OptionsView({ model: this.model.options });
 
-            this.previewSizeOptionsView = new mat.PreviewSizeOptionsView({ model: this.options });
+            this.permalinkView = new mat.PermalinkView({ model: this.model });
 
-            this.previewViews = this.languages.map(function (language) {
-                return new mat.PreviewView({ 
+            this.previewSizeOptionsView = new mat.PreviewSizeOptionsView({ model: this.model.options });
+
+            // Build and render preview views for each language.
+            this.previewViews = this.model.languages.map(function (language) {
+                var previewView = new mat.PreviewView({ 
                     model: {
-                        options: me.options,
+                        options: me.model.options,
                         language: language,
-                        parameters: me.parameters
+                        parameters: me.model.parameters
                     }
                 });
+
+                previewView.render().$el.appendTo("#ImageContainer");
+
+                return previewView;
             });
 
-            this.previewViews.forEach(function (previewView) {
-                previewView.render().$el.appendTo("#ImageContainer");
-            });
+            // Restore state from cookies/querystring
 
             // If a querystring with "useqs" was supplied,
             // this is a permalink. Use the data to restore cookies,
@@ -82,48 +71,42 @@
                 this.restoreFromQueryString(qs);
                 this.saveCookies();
 
-                var url = new $.Url(document.location.href);
-                delete url.queryString.useqs;
-                delete url.queryString.langauges;
-                delete url.queryString.options;
-                delete url.queryString.parameters;
-
-                document.location.replace(url.toString());
+                document.location.replace(this.getRedirectUrl());
             } else {
                 this.restoreFromCookies();
             }
 
             // Save cookies on any model changes
-            this.listenTo(this.parameters, "change", this.saveCookies);
-            this.listenTo(this.languages, "change", this.saveCookies);
-            this.listenTo(this.options, "change", this.saveCookies);
+            this.listenTo(this.model.parameters, "change", this.saveCookies);
+            this.listenTo(this.model.languages, "change", this.saveCookies);
+            this.listenTo(this.model.options, "change", this.saveCookies);
         },
 
         saveCookies: function () {
             var data = {
-                languages: this.languages.getSelectedIds(),
-                parameters: this.parameters.toMap(),
-                options: this.options.toJSON()
+                languages: this.model.languages.getSelectedIds(),
+                parameters: this.model.parameters.toMap(),
+                options: this.model.options.toJSON()
             };
 
             delete (data.options).assetPath;
 
-            $.cookies.set({ name: COOKIE_PREFIX + this.options.get("assetPath"), value: JSON.stringify(data) });
+            $.cookies.set({ name: COOKIE_PREFIX + this.model.options.get("assetPath"), value: JSON.stringify(data) });
         },
 
         _restore: function (data) {
             var me = this;
             data.languages.forEach(function (languageId) {
-                me.languages.getById(languageId).set("enabled", true);
+                me.model.languages.getById(languageId).set("enabled", true);
             });
 
-            this.parameters.fromMap(data.parameters);
+            this.model.parameters.fromMap(data.parameters);
 
-            this.options.set(data.options);
+            this.model.options.set(data.options);
         },
 
         restoreFromCookies: function () {
-            var cookieValue = $.cookies.get(COOKIE_PREFIX + this.options.get("assetPath"));
+            var cookieValue = $.cookies.get(COOKIE_PREFIX + this.model.options.get("assetPath"));
             if (!cookieValue) {
                 return;
             }
@@ -136,6 +119,16 @@
             qs.parameters = $.deparam(qs.parameters);
             qs.options = $.deparam(qs.options);
             this._restore(qs);
+        },
+
+        getRedirectUrl: function () {
+            var url = new $.Url(document.location.href);
+            delete url.queryString.useqs;
+            delete url.queryString.langauges;
+            delete url.queryString.options;
+            delete url.queryString.parameters;
+
+            return url.toString();
         }
     });
 
