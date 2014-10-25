@@ -1,0 +1,399 @@
+/*============================================================================
+ * Global stylesheet for responsive pages (site-neutral)
+ *============================================================================*/
+/*----------------------------------------------------------------------------
+ * Browser-equalizing styles
+ *----------------------------------------------------------------------------*/
+/*
+ * IE uses border-box all the time; others use content-box by default. Setting
+ * these ensures that all measurements will be treated the same across all
+ * browsers.
+ */
+* {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -ms-box-sizing: content-box;
+  box-sizing: content-box;
+}
+/*
+ * Corrects scaling in Windows 8 
+ */
+@-ms-viewport {
+  width: device-width;
+}
+/*
+* default for HTML5 tags
+*/
+aside,
+nav,
+header,
+footer,
+section,
+details,
+article {
+  display: block;
+}
+/*----------------------------------------------------------------------------
+ * General Styles
+ *----------------------------------------------------------------------------*/
+/*
+ * Define default background color and font.
+ */
+body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+}
+/*
+ * Define default font size.
+ */
+body,
+td,
+th {
+  font-size: 11px;
+}
+/*
+ * General appearance for links.
+ */
+a {
+  color: #2E2F91;
+}
+a:hover {
+  color: #000033;
+}
+a.nav {
+  text-decoration: none;
+}
+a.nav:hover {
+  text-decoration: underline;
+}
+/*
+ * Images should have no border by default.
+ */
+img {
+  border-width: 0;
+}
+/*
+ * Heading styles
+ */
+h1 {
+  font-size: 18px;
+}
+h2 {
+  font-size: 14px;
+  font-weight: bold;
+}
+h3 {
+  font-size: 12px;
+  font-weight: bold;
+}
+/*----------------------------------------------------------------------------
+ * Pricing Styles
+ *----------------------------------------------------------------------------*/
+.price-large {
+  font-size: 14px;
+}
+/*
+ * Formerly "crossout". The price we aren't charging the customers
+ * but they can see how much they're saving.
+ */
+.comparative-list-price,
+.strikeout-price {
+  text-decoration: line-through;
+}
+.short-tax-message {
+  font-size: .92em;
+  filter: alpha(opacity=70);
+  zoom: 1;
+  opacity: 0.7;
+}
+.ie6to8 .short-tax-message {
+  display: inline-block;
+}
+/*
+ * The actual price the customer is paying in relation to the comparative price.
+ */
+.discount {
+  color: #eb0a87;
+  font-weight: bold;
+}
+.discount-price {
+  color: #DE0000;
+}
+/*----------------------------------------------------------------------------
+ * General Purpose Font Styles
+ *----------------------------------------------------------------------------*/
+.text-large {
+  font-size: 14px;
+}
+.text-x-large {
+  font-size: 16px;
+}
+.error,
+.alert {
+  font-weight: bold;
+  font-size: 12px;
+  color: #DE0000;
+}
+div.error,
+div.alert {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.all-caps {
+  text-transform: uppercase;
+}
+/*
+ * Cross-browser way of getting pointer/hand cursor.
+ */
+.cursor-pointer {
+  cursor: pointer;
+}
+/*
+ * Styles for clickable buttons
+ */
+.enabled-button {
+  cursor: pointer;
+}
+.disabled-button,
+.textbutton.disabled-button {
+  display: none;
+}
+/*
+ * Misc layout styles
+ */
+.clear {
+  clear: both;
+}
+.clearfix:before,
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+.clearfix:after {
+  clear: both;
+}
+.ie7 .clearfix,
+.ie6 .clearfix {
+  zoom: 1;
+}
+/*============================================================================
+* Responsive Standard Layout
+*============================================================================*/
+.broadcast-bar,
+.footer-container,
+.cobrand-footer {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.main-panel-inner {
+  margin: 0 auto;
+}
+/*
+ * Styles for javascript disabled banner
+ */
+.noscript-padding {
+  padding-top: 26px;
+}
+#noscript-warning {
+  height: 16px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  background-color: #fffcce;
+  padding: 5px 0 5px 0;
+  z-index: 101;
+  font-size: 14px;
+  font-weight: bold;
+}
+/*============================================================================
+ * Responsive Global Style Sheet for Vistaprint site only
+ *============================================================================*/
+html {
+  -webkit-text-size-adjust: 100%;
+}
+/* global font size */
+body,
+td,
+th,
+.form-label,
+div.top-label,
+.holiday-pricing-text,
+.rss-section-title {
+  font-size: 12px;
+  color: #38454f;
+}
+/* layout styles */
+body.responsive {
+  height: 100%;
+}
+.brand-2014.standard-layout .main-panel {
+  text-align: center;
+}
+.brand-2014.standard-layout .main-panel-inner {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+.brand-2014.standard-layout .main-panel-inner-fixed {
+  width: 960px;
+}
+.brand-2014.standard-layout .main-content {
+  clear: both;
+}
+/* headings */
+.responsive h1 {
+  font-size: 28px;
+}
+.responsive h2 {
+  font-size: 24px;
+}
+.responsive h3 {
+  font-size: 18px;
+}
+.responsive h4 {
+  font-size: 16px;
+}
+.responsive h5 {
+  font-size: 14px;
+}
+.responsive h6 {
+  font-size: 13px;
+}
+.responsive h1,
+.responsive h2,
+.responsive h3,
+.responsive h4,
+.responsive h5,
+.responsive h6 {
+  font-weight: normal;
+  margin-top: 0;
+  color: #111a22;
+  line-height: 1em;
+}
+.responsive h1,
+.responsive h2,
+.responsive h3,
+.responsive h4,
+.responsive.brand-2014 h5,
+.responsive h1.basic,
+.responsive h2.basic,
+.responsive h3.basic,
+.responsive h4.basic,
+.responsive.brand-2014 h5.basic {
+  font-family: 'MarkPro', sans-serif;
+  font-weight: 300;
+}
+.brand-2014 .responsive h1,
+.brand-2014 .responsive h2,
+.brand-2014 .responsive h3,
+.brand-2014 .responsive h4,
+.brand-2014 .responsive.brand-2014 h5,
+.brand-2014 .responsive h1.basic,
+.brand-2014 .responsive h2.basic,
+.brand-2014 .responsive h3.basic,
+.brand-2014 .responsive h4.basic,
+.brand-2014 .responsive.brand-2014 h5.basic {
+  font-family: 'MarkPro', sans-serif;
+}
+.lang-jp .responsive h1,
+.lang-jp .responsive h2,
+.lang-jp .responsive h3,
+.lang-jp .responsive h4,
+.lang-jp .responsive.brand-2014 h5,
+.lang-jp .responsive h1.basic,
+.lang-jp .responsive h2.basic,
+.lang-jp .responsive h3.basic,
+.lang-jp .responsive h4.basic,
+.lang-jp .responsive.brand-2014 h5.basic {
+  font-family: 'MS Gothic', 'MS Mincho', sans-serif;
+}
+/* links */
+a {
+  color: #008bc6;
+  text-decoration: none;
+}
+a:hover {
+  color: #008bc6;
+  text-decoration: underline;
+}
+a.knockout,
+a.knockout:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+/* font styles */
+.emphasis {
+  font-weight: bold;
+}
+.brand-2014 .text-large,
+.brand-2014 .text-x-large {
+  font-family: 'MarkPro', sans-serif;
+  font-weight: 300;
+}
+.brand-2014 .brand-2014 .text-large,
+.brand-2014 .brand-2014 .text-x-large {
+  font-family: 'MarkPro', sans-serif;
+}
+.lang-jp .brand-2014 .text-large,
+.lang-jp .brand-2014 .text-x-large {
+  font-family: 'MS Gothic', 'MS Mincho', sans-serif;
+}
+.price {
+  font-size: 12px;
+  color: #38454f;
+}
+.price-large {
+  font-size: 14px;
+  font-family: 'MarkPro', sans-serif;
+  font-weight: 300;
+  color: #38454f;
+}
+.brand-2014 .price-large {
+  font-family: 'MarkPro', sans-serif;
+}
+.lang-jp .price-large {
+  font-family: 'MS Gothic', 'MS Mincho', sans-serif;
+}
+.discount {
+  color: #eb0a87;
+}
+.discount-price {
+  color: #eb0a87;
+  font-weight: bold;
+  font-size: inherit;
+}
+h1 .discount-price {
+  font-weight: inherit;
+}
+span.undefined-price {
+  white-space: nowrap;
+}
+.error,
+.urgent-instruction {
+  color: #e00808;
+}
+.alert {
+  color: #ff8200;
+}
+.knockout,
+.responsive .knockout {
+  color: #ffffff;
+}
+/* breadcrumbs */
+.breadcrumbs {
+  font-size: 12px;
+  height: 23px;
+  padding: 4px 0 0 20px;
+  color: #38454f;
+}
+.breadcrumbs a {
+  font-size: 12px;
+  color: #008bc6;
+}
