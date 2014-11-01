@@ -132,4 +132,8 @@
         }
     });
 
+    new mat.AppView(window.initData);
+
 })(mat, jQuery);
+
+
