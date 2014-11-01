@@ -24,6 +24,9 @@
         }
     };
 
+    // Bind key value pairs where the key is a DOM element selector, 
+    // and the value is the name of the property in the view's model.
+    // If initializeDOM is true, then the DOM element is initialized from the model immediately.
     Backbone.View.prototype.dataBind = function (map, initializeDOM) {
         for (var key in map) {
             var $el = key.indexOf("#") === 0 ? $(key) : this.$el.find(key);
