@@ -13,11 +13,13 @@
     "browserify": "~6.2.0",
     "browserify-shim": "~3.8.0",
     "grunt-exec": "~0.4.6",
-    "grunt-contrib-clean": "~0.6.0"
+    "grunt-contrib-clean": "~0.6.0",
+    "exorcist": "~0.1.6",
+    "grunt-exorcise": "~0.2.0"
   },
   "scripts": {
     "test": "grunt test",
-    "browserify": "browserify -r ./js/AppView.js:AppView > ./js/MerchandisingAssetTester_generated.js"
+    "browserify": "browserify -d -r ./js/AppView.js:AppView > ./js/MerchandisingAssetTester_generated.js"
   },
   "main": "./js/AppView.js",
   "browser": {
