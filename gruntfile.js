@@ -12,6 +12,11 @@ module.exports = function (grunt) {
         exec: {
             "browserify": "npm run-script browserify" 
         },
+        clean: {
+            main: {
+                src: [ "./js/MerchandisingAssetTester_generated.js"]
+            }
+        },
         watch: {
           scripts: {
             files: ["./js/**/*.js"],
@@ -29,6 +34,7 @@ module.exports = function (grunt) {
     // NPM tasks
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-watch");
+    grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-exec");
 
     grunt.registerTask("build", ["exec:browserify"]);

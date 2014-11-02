@@ -12,11 +12,18 @@
     "grunt-contrib-watch": "~0.6.1",
     "browserify": "~6.2.0",
     "browserify-shim": "~3.8.0",
-    "grunt-exec": "~0.4.6"
+    "grunt-exec": "~0.4.6",
+    "grunt-contrib-clean": "~0.6.0"
   },
   "scripts": {
     "test": "grunt test",
-    "browserify": "browserify --ignore jquery --ignore backbone --ignore underscore -r ./js/AppView.js:AppView > ./build/mat.js"
+    "browserify": "browserify -r ./js/AppView.js:AppView > ./js/MerchandisingAssetTester_generated.js"
+  },
+  "main": "./js/AppView.js",
+  "browser": {
+    "jquery": false,
+    "backbone": false,
+    "underscore": false
   },
   "browserify": {
     "transform": [
