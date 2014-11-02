@@ -1,11 +1,13 @@
 /*jsl:option explicit*/
-/* global _, jQuery, Backbone */
+/* global require, module */
 
-"use strict";
+var $ = require("jquery");
+var Backbone = require("backbone");
+Backbone.$ = $;
 
-var mat = {};
+var Models = {};
 
-mat.Language = Backbone.Model.extend({
+Models.Language = Backbone.Model.extend({
     defaults: function () {
         return {
             enabled: false,
@@ -19,8 +21,8 @@ mat.Language = Backbone.Model.extend({
     }
 });
 
-mat.LanguageList = Backbone.Collection.extend({
-    model: mat.Language,
+Models.LanguageList = Backbone.Collection.extend({
+    model: Models.Language,
 
     initialize: function (models) {
         var me = this;
@@ -42,7 +44,7 @@ mat.LanguageList = Backbone.Collection.extend({
     }
 });
 
-mat.Parameter = Backbone.Model.extend({
+Models.Parameter = Backbone.Model.extend({
     defaults: function () {
         return {
             value: null,
@@ -51,8 +53,8 @@ mat.Parameter = Backbone.Model.extend({
     }
 });
 
-mat.ParameterList = Backbone.Collection.extend({
-    model: mat.Parameter,
+Models.ParameterList = Backbone.Collection.extend({
+    model: Models.Parameter,
 
     toMap: function () {
         var qs = {};
@@ -75,7 +77,7 @@ mat.ParameterList = Backbone.Collection.extend({
     }
 });
 
-mat.OptionsModel = Backbone.Model.extend({
+Models.OptionsModel = Backbone.Model.extend({
     defaults: function () {
         return {
             assetPath: null,
@@ -86,3 +88,5 @@ mat.OptionsModel = Backbone.Model.extend({
         };
     }
 });
+
+module.exports = Models;

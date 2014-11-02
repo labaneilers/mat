@@ -1,12 +1,20 @@
 /*jsl:option explicit*/
-/* global mat, Backbone */
+/* global require, module */
 
-"use strict";
+var $ = require("jquery");
+var Backbone = require("backbone");
+Backbone.$ = $;
 
-mat.PreviewSizeOptionsView = Backbone.View.extend({
+var dataBind = require("./backbone.databind");
+
+var PreviewSizeOptionsView = Backbone.View.extend({
     initialize: function () {
-        this.dataBind({
-            "#previewSize": "previewSize"
-        });
+        dataBind(
+        	this,
+        	{
+	            "#previewSize": "previewSize"
+	        });
     }
 });
+
+module.exports = PreviewSizeOptionsView;

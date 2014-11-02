@@ -1,15 +1,23 @@
 /*jsl:option explicit*/
-/* global mat, Backbone */
+/* global require, module */
 
-"use strict";
+var $ = require("jquery");
+var Backbone = require("backbone");
+Backbone.$ = $;
 
-mat.OptionsView = Backbone.View.extend({
+var dataBind = require("./backbone.databind");
+
+var OptionsView = Backbone.View.extend({
 	el: ".params-options-section",
 	
     initialize: function () {
-        this.dataBind({
-            "#enableTokenPreview": "enableTokenPreview",
-            "#showOverlays": "showOverlays"
-        }, true);
+        dataBind(
+        	this,
+        	{
+	            "#enableTokenPreview": "enableTokenPreview",
+	            "#showOverlays": "showOverlays"
+	        }, true);
     }
 });
+
+module.exports = OptionsView;

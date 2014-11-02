@@ -1,9 +1,11 @@
 /*jsl:option explicit*/
-/* global mat, Backbone */
+/* global require, module */
 
-"use strict";
+var $ = require("jquery");
+var Backbone = require("backbone");
+Backbone.$ = $;
 
-mat.LanguageOptionsView = Backbone.View.extend({
+var LanguageOptionsView = Backbone.View.extend({
 
     el: ".language-toolbar-options",
 
@@ -22,3 +24,5 @@ mat.LanguageOptionsView = Backbone.View.extend({
         });
     }
 });
+
+module.exports = LanguageOptionsView;

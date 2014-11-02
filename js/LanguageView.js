@@ -1,25 +1,30 @@
 /*jsl:option explicit*/
-/* global mat, jQuery, Backbone */
+/* global require, module */
 
-"use strict";
+var $ = require("jquery");
+var Backbone = require("backbone");
+Backbone.$ = $;
 
-(function (mat, $) {
+var Models = require("./Models");
+var dataBind = require("./backbone.databind");
 
-mat.LanguageView = Backbone.View.extend({
+var LanguageView = Backbone.View.extend({
     initialize: function () {
-        this.dataBind({
-            ".language-id": "enabled"
-        });
+        dataBind(
+            this, 
+            {
+                ".language-id": "enabled"
+            });
     }
 });
 
-mat.createLanguageViews = function () {
+LanguageView.createLanguageViews = function () {
 	return $(".language-toolbar .language-link").map(function (index, el) {
-        return new mat.LanguageView({ 
+        return new LanguageView({ 
             el: el,
-            model: new mat.Language({ id: $(el).attr("for"), name: $(el).find("input").attr("name") })
+            model: new Models.Language({ id: $(el).attr("for"), name: $(el).find("input").attr("name") })
         });
     });
 };
 
-}(mat, jQuery));
+module.exports = LanguageView;
