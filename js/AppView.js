@@ -48,6 +48,10 @@ var AppView = Backbone.View.extend({
         // Then, options set by the user can be restored from cookies.
         this.model.options = new Models.OptionsModel(options);
 
+        // The previous views needed to be built before restoring state, because the views are responsible for 
+        // initializing their own models. Before we bind further views, restore state.
+        this._restoreState();    
+
         this.languageOptionsView = new LanguageOptionsView({ model: this.model.languages });
 
         this.optionsView = new OptionsView({ model: this.model.options });
@@ -71,6 +75,13 @@ var AppView = Backbone.View.extend({
             return previewView;
         });
 
+        // Save cookies on any model changes
+        this.listenTo(this.model.parameters, "change", this.saveCookies);
+        this.listenTo(this.model.languages, "change", this.saveCookies);
+        this.listenTo(this.model.options, "change", this.saveCookies);
+    },
+
+    _restoreState: function () {
         // Restore state from cookies/querystring
 
         // If a querystring with "useqs" was supplied,
@@ -86,11 +97,6 @@ var AppView = Backbone.View.extend({
         } else {
             this.restoreFromCookies();
         }
-
-        // Save cookies on any model changes
-        this.listenTo(this.model.parameters, "change", this.saveCookies);
-        this.listenTo(this.model.languages, "change", this.saveCookies);
-        this.listenTo(this.model.options, "change", this.saveCookies);
     },
 
     saveCookies: function () {
