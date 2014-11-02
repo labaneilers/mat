@@ -9,24 +9,8 @@ module.exports = function (grunt) {
                 jshintrc: ".jshintrc"
             }
         },
-        browserify: {
-            main: {
-                src: ["./js/AppView.js"],
-                dest: "./build/mat.js",
-                options: {
-                    ignore: [
-                        "jquery",
-                        "backbone",
-                        "underscore"
-                    ],
-                    alias: [
-                      "./js/AppView.js:AppView"                  
-                    ]
-                }
-            },
-        },
         exec: {
-            "browserify": "browserify --ignore jquery --ignore backbone --ignore underscore -r ./js/AppView.js:AppView > ./build/mat.js" 
+            "browserify": "npm run-script browserify" 
         },
         watch: {
           scripts: {
@@ -44,8 +28,9 @@ module.exports = function (grunt) {
 
     // NPM tasks
     grunt.loadNpmTasks("grunt-contrib-jshint");
-    grunt.loadNpmTasks("grunt-browserify");
+    grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-exec");
 
-    grunt.registerTask("default", ["jshint"]);
+    grunt.registerTask("build", ["exec:browserify"]);
+    grunt.registerTask("default", ["jshint", "build"]);
 };

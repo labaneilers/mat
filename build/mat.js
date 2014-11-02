@@ -553,7 +553,7 @@ module.exports = function (view, map, initializeDOM) {
 },{}],"AppView":[function(require,module,exports){
 (function (global){
 /*jsl:option explicit*/
-/* global require */
+/* global require, module */
 
 var $ = (typeof window !== "undefined" ? window.$ : typeof global !== "undefined" ? global.$ : null);
 var _ = (typeof window !== "undefined" ? window._ : typeof global !== "undefined" ? global._ : null);
@@ -704,4 +704,4 @@ module.exports.init = function (data) {
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./LanguageOptionsView":2,"./LanguageView":3,"./Models":5,"./OptionsView":6,"./ParameterViewFactory":8,"./PermalinkView":9,"./PreviewSizeOptionsView":10,"./PreviewView":11}]},{},["AppView"]);
+},{"./LanguageOptionsView":2,"./LanguageView":3,"./Models":5,"./OptionsView":6,"./ParameterViewFactory":8,"./PermalinkView":9,"./PreviewSizeOptionsView":10,"./PreviewView":11}]},{},[]);

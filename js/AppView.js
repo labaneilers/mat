@@ -1,5 +1,5 @@
 /*jsl:option explicit*/
-/* global require */
+/* global require, module */
 
 var $ = require("jquery");
 var _ = require("underscore");
