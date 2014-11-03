@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     var config = {
         pkg: grunt.file.readJSON("package.json"),
         jshint: {
-            main: ["gruntfile.js", "./js/**/*.js", "!./js/*_generated.js"],
+            main: ["gruntfile.js", "./js/**/*.js", "!./js/*_generated.js", "!./js/**/*_min.js"],
             options: {
                 jshintrc: ".jshintrc"
             }
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
             main: {
                 options: {},
                 files: {
-                    "./js/MerchandisingAssetTester_generated.map": ["./js/MerchandisingAssetTester_generated.js"]
+                    "./js/MerchandisingAssetTester_generated.js.map": ["./js/MerchandisingAssetTester_generated.js"]
                 }
             }
         },
@@ -49,3 +49,5 @@ module.exports = function(grunt) {
     grunt.registerTask("build", ["exec:browserify", "exorcise"]);
     grunt.registerTask("default", ["jshint", "build"]);
 };
+
+// 
